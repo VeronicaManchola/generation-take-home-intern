@@ -1,18 +1,100 @@
 import React, { Component } from 'react';
+import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 
 /*
 * Use this component as a launching-pad to build your functionality.
 *
 */
 
-componentDid
+const mapStyles = {
+  width: '40rem',
+  height: '40rem'
+};
 
 class YourComponent extends Component {
+
+  constructor(props) {
+    super(props);
+    this.unsubscribe = null;
+    this.state = {
+      showingInfoWindow: false,
+      activeMarker: {},
+      selectedPlace: {},
+      data: null
+    }
+  }
+
+  componentDidMount() {
+    fetch('./store_directory.json')
+      .then(response => response.json())
+      .then(data => this.setState({ data }))
+      .catch(console.error);
+  }
+
+  onMarkerClick = (props, marker, e) => {
+
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true
+    });
+  }
+
+  onClose = props => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
+      });
+    }
+  };
+
   render() {
+    if (!this.state.data) {
+      return <div />
+    }
+
     return (
-      <div style={divStyle}>
-        <h1> Put your solution here!</h1>
-        <div id="map"></div>
+      <div>
+        <h1 style={divStyle}> Put your solution here!</h1>
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <div id="map">
+                <Map
+                  google={this.props.google}
+                  zoom={12}
+                  style={mapStyles}
+                  initialCenter={{
+                    lat: 19.4285,
+                    lng: -99.1277
+                  }}
+                  onClick={this.onMapClicked}>
+                  {this.state.data.map((store, index) => {
+                    return (
+                      <Marker
+                        position={{ lat: store.Coordinates.lat, lng: store.Coordinates.lng }}
+                        onClick={this.onMarkerClick.bind(this, store)}
+                        name={store.name}
+                        address={store.address} />
+                    )
+                  }
+                  )}
+                  <InfoWindow
+                    marker={this.state.activeMarker}
+                    visible={this.state.showingInfoWindow}
+                    onClose={this.onClose}
+                  >
+                    <div>
+                      <h4>{this.state.selectedPlace.Name}</h4>
+                    </div>
+                  </InfoWindow>
+                </Map>
+                <div id="info"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -25,4 +107,6 @@ var divStyle = {
   padding: 20
 };
 
-export default YourComponent;
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyCVH8e45o3d-5qmykzdhGKd1-3xYua5D2A'
+})(YourComponent);

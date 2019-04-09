@@ -38,7 +38,7 @@ class App extends Component {
           <li>That said, code that is easy to follow is always appreciated :)</li>
         </ul>
 
-        <YourComponent />
+        {<YourComponent />}
       </div>
     );
   }
