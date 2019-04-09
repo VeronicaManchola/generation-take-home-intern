@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 import './YourComponent.css'
+import firebase from './Firebase';
 
 /*
 * Use this component as a launching-pad to build your functionality.
@@ -18,6 +19,7 @@ class YourComponent extends Component {
   constructor(props) {
     super(props);
     this.unsubscribe = null;
+    this.ref = firebase.firestore().collection('favorites').doc("list");
     this.state = {
       showingInfoWindow: false,
       activeMarker: {},
@@ -28,16 +30,17 @@ class YourComponent extends Component {
   }
 
   favoriteButton() {
-    const btn = <input value="Favorito" type="button" onClick={() => { 
-       let newFav = this.state.selectedPlace
-       let favList = this.state.favorites.concat(newFav);
-       this.setState({ favorites: favList })
-    }}/>
+    const btn = <input value="Favorito" type="button" onClick={() => {
+      let newFav = this.state.selectedPlace
+      let favList = this.state.favorites.concat(newFav);
+      this.ref.set({ favList });
+      this.setState({ favorites: favList })
+    }} />
 
-    window.requestAnimationFrame(function() {
+    window.requestAnimationFrame(function () {
       let space = document.getElementById("btnSpace");
       if (space !== null) {
-        ReactDOM.render( btn, space)
+        ReactDOM.render(btn, space)
       }
     });
   }
@@ -49,8 +52,8 @@ class YourComponent extends Component {
       .catch(console.error);
   }
 
-  componentDidUpdate(){
-    console.log(this.state.favorites);    
+  componentDidUpdate() {
+    console.log(this.state.favorites);
     this.favoriteButton();
   }
 
