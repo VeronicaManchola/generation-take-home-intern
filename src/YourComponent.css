@@ -1,3 +1,8 @@
 .marker{
     cursor: pointer;
 }
+
+.stores{
+    height: 30rem;
+    overflow: hidden;
+}

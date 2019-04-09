@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
+import './YourComponent.css'
 
 /*
 * Use this component as a launching-pad to build your functionality.
@@ -20,8 +22,24 @@ class YourComponent extends Component {
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
-      data: null
+      data: null,
+      favorites: []
     }
+  }
+
+  favoriteButton() {
+    const btn = <input value="Favorito" type="button" onClick={() => { 
+       let newFav = this.state.selectedPlace
+       let favList = this.state.favorites.concat(newFav);
+       this.setState({ favorites: favList })
+    }}/>
+
+    window.requestAnimationFrame(function() {
+      let space = document.getElementById("btnSpace");
+      if (space !== null) {
+        ReactDOM.render( btn, space)
+      }
+    });
   }
 
   componentDidMount() {
@@ -31,11 +49,16 @@ class YourComponent extends Component {
       .catch(console.error);
   }
 
+  componentDidUpdate(){
+    console.log(this.state.favorites);    
+    this.favoriteButton();
+  }
+
   onMarkerClick = (props, marker, e) => {
 
     this.setState({
       selectedPlace: props,
-      activeMarker: marker,
+      activeMarker: e,
       showingInfoWindow: true
     });
   }
@@ -86,11 +109,12 @@ class YourComponent extends Component {
                     onClose={this.onClose}
                   >
                     <div>
-                      <h4>{this.state.selectedPlace.Name}</h4>
+                      <h5>{this.state.selectedPlace.Name}</h5>
+                      <p>{this.state.selectedPlace.Address}</p>
+                      <div id="btnSpace"></div>
                     </div>
                   </InfoWindow>
                 </Map>
-                <div id="info"></div>
               </div>
             </div>
           </div>
