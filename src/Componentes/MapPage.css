@@ -1,0 +1,81 @@
+ /* Extra small devices (phones, 600px and down) */
+ @media only screen and (max-width: 600px) {
+    .googleMap{
+        max-width: 90%;
+        max-height: 90%;
+        color: #173238;
+    }
+    
+    .stores{
+        height: 200px;
+    }
+ }
+
+ /* Small devices (portrait tablets and large phones, 600px and up) */
+ @media only screen and (min-width: 600px) {
+    .googleMap{
+        max-width: 90%;
+        max-height: 90%;
+        color: #173238;
+    }
+    
+    .stores{
+        height: 300px;
+    }
+ }
+ 
+ /* Medium devices (landscape tablets, 768px and up) */
+ @media only screen and (min-width: 768px) {
+    .googleMap{
+        max-width: 90%;
+        max-height: 90%;
+        color: #173238;
+    }
+    
+    .stores{
+        height: 400px;
+    }
+ }
+ 
+ /* Large devices (laptops/desktops, 992px and up) */
+ @media only screen and (min-width: 992px) {
+    .googleMap{
+        max-width: 90%;
+        max-height: 90%;
+        color: #173238;
+    }
+    
+    .stores{
+        height: 500px;
+    }
+ }
+ 
+ /* Extra large devices (large laptops and desktops, 1200px and up) */
+ @media only screen and (min-width: 1200px) {
+    .googleMap{
+        max-width: 90%;
+        max-height: 90%;
+        color: #173238;
+    }
+    
+    .stores{
+        height: 550px;
+    }
+ } 
+
+.stores{
+    color: #D9CEB0;
+}
+
+.favList{
+    border-bottom-color: #8C8C7D;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    margin-bottom: .5rem;
+}
+
+.Copia-di-Kopie-van-Development-1-hex { color: #173238; }
+.Copia-di-Kopie-van-Development-2-hex { color: #276066; }
+.Copia-di-Kopie-van-Development-3-hex { color: #8C8C7D; }
+.Copia-di-Kopie-van-Development-4-hex { color: #D9CEB0; }
+.Copia-di-Kopie-van-Development-5-hex { color: #F5E9D7; }

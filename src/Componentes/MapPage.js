@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
-import './YourComponent.css'
-import firebase from './Firebase';
+import './MapPage.css'
+import firebase from '../Firebase';
 
 /*
 * Use this component as a launching-pad to build your functionality.
 *
 */
 
-const mapStyles = {
-  width: '40rem',
-  height: '40rem'
-};
-
-class YourComponent extends Component {
+class FullMap extends Component {
 
   constructor(props) {
     super(props);
@@ -50,10 +45,19 @@ class YourComponent extends Component {
       .then(response => response.json())
       .then(data => this.setState({ data }))
       .catch(console.error);
+
+    this.ref.get().then((doc) => {
+        if (doc.exists) {
+          this.setState({
+            favorites: doc.data().favList
+          });
+        } else {
+          console.log("No such document!");
+        }
+    })
   }
 
   componentDidUpdate() {
-    console.log(this.state.favorites);
     this.favoriteButton();
   }
 
@@ -82,15 +86,13 @@ class YourComponent extends Component {
 
     return (
       <div>
-        <h1 style={divStyle}> Put your solution here!</h1>
         <div className="container">
           <div className="row">
-            <div className="col-12">
-              <div id="map">
+            <div className="col-12 col-md-6 stores">
                 <Map
                   google={this.props.google}
                   zoom={12}
-                  style={mapStyles}
+                  className="googleMap"
                   initialCenter={{
                     lat: 19.4285,
                     lng: -99.1277
@@ -118,7 +120,24 @@ class YourComponent extends Component {
                     </div>
                   </InfoWindow>
                 </Map>
-              </div>
+            </div>
+            <div className="col-12 col-md-6 stores">
+              <table>
+                <tbody>
+                  {this.state.favorites.map((favorite, index) =>
+                    <tr id={"favList-" + index} className="favList">
+                      <td>{favorite.Name}</td>
+                      <td>{favorite.Address}</td>
+                      <td><i className="material-icons"
+                      onClick={() => {
+                        let toRemove = this.state.favorites
+                        toRemove.splice(index, 1);
+                        this.setState({ favorites: toRemove });
+                        this.ref.set({ favList: toRemove })
+                      }}>delete</i></td>
+                    </tr>)}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -127,13 +146,6 @@ class YourComponent extends Component {
   }
 }
 
-var divStyle = {
-  border: 'red',
-  borderWidth: 2,
-  borderStyle: 'solid',
-  padding: 20
-};
-
 export default GoogleApiWrapper({
   apiKey: 'AIzaSyCVH8e45o3d-5qmykzdhGKd1-3xYua5D2A'
-})(YourComponent);
+})(FullMap);
